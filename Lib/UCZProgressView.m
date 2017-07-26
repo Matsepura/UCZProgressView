@@ -70,7 +70,7 @@
 
 - (UIView *)defaultBackgroundView {
     UIView *backgroundView = [[UIView alloc] init];
-    backgroundView.backgroundColor = [UIColor whiteColor];
+    backgroundView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
     
     return backgroundView;
 }
@@ -205,6 +205,9 @@
 
 #pragma mark -
 
+static int imgAngle=0;
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+
 - (void)setIndeterminate:(BOOL)indeterminate {
     if (_indeterminate == indeterminate) {
         return;
@@ -217,14 +220,17 @@
         _progressLayer.strokeStart = 0.1;
         _progressLayer.strokeEnd = 1.0;
         
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-        animation.toValue = @(M_PI);
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
         animation.duration = 0.5;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        animation.repeatCount = MAXFLOAT;
+        animation.additive = YES;
         animation.cumulative = YES;
-        
-        [self.backgroundLayer addAnimation:animation forKey:nil];
+        animation.repeatCount = MAXFLOAT;
+        animation.removedOnCompletion = NO;
+        animation.fillMode = kCAFillModeForwards;
+        animation.fromValue = [NSNumber numberWithFloat:DEGREES_TO_RADIANS(imgAngle)];
+        animation.toValue = [NSNumber numberWithFloat:DEGREES_TO_RADIANS(imgAngle+90)];
+        [self.backgroundLayer addAnimation:animation forKey:@"90rotation"];
+
     } else {
 #if !TARGET_INTERFACE_BUILDER
         _progressLayer.actions = @{@"strokeStart": [NSNull null], @"strokeEnd": [NSNull null]};
@@ -242,7 +248,7 @@
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated {
     if (self.indeterminate) {
-        self.indeterminate = NO;
+//        self.indeterminate = NO;
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate date]];
     }
     
