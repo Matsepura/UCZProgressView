@@ -247,10 +247,10 @@ static int imgAngle=0;
 }
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated {
-    if (self.indeterminate) {
+//    if (self.indeterminate) {
 //        self.indeterminate = NO;
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate date]];
-    }
+//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate date]];
+//    }
     
     if (_progress >= 1.0 && progress >= 1.0) {
         _progress = 1.0;
