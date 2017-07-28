@@ -276,7 +276,7 @@ static int imgAngle=0;
     
     if (progress >= 1.0) {
 #if !TARGET_INTERFACE_BUILDER
-        [self performFinishAnimation];
+//        [self performFinishAnimation];
 #endif
     }
     
